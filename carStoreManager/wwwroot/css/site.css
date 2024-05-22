@@ -1,0 +1,58 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+a.bg-dark:hover, input.bg-dark:hover {
+    background: #3d7fdf !important;
+}
+
+a.nav-link {
+    border-bottom: 3px solid white;
+}
+
+    a.nav-link:hover {
+        border-bottom: 3px solid #3d7fdf;
+    }
+
+.headerImage {
+    height: 2rem;
+    width: 100%;
+}
+
+.btn-color {
+    background-color: #0e1c36;
+    color: #fff;
+}
+
+.profile-image-pic {
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
+}
+
+.cardbody-color {
+    background-color: #ebf2fa;
+}
+
+a {
+    text-decoration: none;
+}

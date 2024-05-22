@@ -1,0 +1,34 @@
+﻿@model IEnumerable<carStoreManager.Models.Car>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+    <div class="container my-4">
+        <div class="d-flex flex-wrap justify-content-center">
+@foreach (var item in Model)
+{
+            <div class="item">
+                <div class="item-inner">
+                    @if (string.IsNullOrEmpty(item.URL))
+                    {<img src="Images/defaultCar.jpg" class="item-image" alt="Item Image">}
+                    else
+                    { <img src="@Html.DisplayFor(modelItem => item.URL)" class="item-image" alt="Item Image">}
+                    <div class="item-footer">
+                        <div class="item-content">
+                            <span class="name">@Html.DisplayFor(modelItem => item.ItemName)</span>
+                            <span class="price">$@Html.DisplayFor(modelItem => item.Price)</span>
+                            <button class="btn btn-success btn-sm mb-2 bg-dark hover-overlay"><a asp-action="Details" asp-route-id="@item.Id">Details</a></button>
+                        </div>
+                        @* <div class="button-group">
+                            <button class="btn btn-primary btn-sm">Button 1</button>
+                            <button class="btn btn-secondary btn-sm">Button 2</button>
+                        </div> *@
+                    </div>
+                </div>
+            </div>
+
+}
+        </div>
+    </div>
+
+
