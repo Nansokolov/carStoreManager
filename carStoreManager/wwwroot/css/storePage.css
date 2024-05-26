@@ -94,6 +94,7 @@
 
 .card-img {
     height: 100%;
+    max-height: 300px;
     object-fit: cover;
     border: 1px solid grey;
 }
