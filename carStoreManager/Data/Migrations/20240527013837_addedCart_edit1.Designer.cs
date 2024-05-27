@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using carStoreManager.Data;
 
@@ -11,9 +12,11 @@ using carStoreManager.Data;
 namespace carStoreManager.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240527013837_addedCart_edit1")]
+    partial class addedCart_edit1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -281,9 +284,11 @@ namespace carStoreManager.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ItemName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Price")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantity")
@@ -295,7 +300,9 @@ namespace carStoreManager.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CartItem");
+                    b.HasIndex("CarId");
+
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -354,6 +361,17 @@ namespace carStoreManager.Data.Migrations
                     b.HasOne("carStoreManager.Models.ApplicationUser", null)
                         .WithMany("Cars")
                         .HasForeignKey("ApplicationUserId");
+                });
+
+            modelBuilder.Entity("carStoreManager.Models.CartItem", b =>
+                {
+                    b.HasOne("carStoreManager.Models.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("carStoreManager.Models.ApplicationUser", b =>

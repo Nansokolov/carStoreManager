@@ -12,5 +12,6 @@ namespace carStoreManager.Data
         }
 
         public DbSet<Car> Car { get; set; }
+        public DbSet<carStoreManager.Models.CartItem> CartItem { get; set; } = default!;
     }
 }
