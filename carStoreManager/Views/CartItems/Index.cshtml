@@ -2,58 +2,123 @@
 
 @{
     ViewData["Title"] = "Index";
+    double totalPrice = 0;
 }
+<link rel="stylesheet" href="~/css/cartItems.css" asp-append-version="true" />
 
-<h1>Index</h1>
+<section class="h-100 h-custom" style="background-color: #5f6792; border-radius: 1rem;">
+  <div class="container py-3 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12">
+        <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+          <div class="card-body p-0">
+            <div class="row g-0">
+              <div class="col-lg-8">
+                <div class="p-5">
+                  <div class="d-flex justify-content-between align-items-center mb-5">
+                    <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
+                    <h6 class="mb-0 text-muted">@Model.Count() item(s)</h6>
+                  </div>
+                  <hr class="my-4">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CarId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CarId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                  @foreach (var item in Model)
+                    {
+                      totalPrice += double.Parse(item.Price.Replace(",", ""));
+                      <div class="row mb-4 d-flex justify-content-between align-items-center">
+                        <div class="col-md-2 col-lg-2 col-xl-2">
+                            @if (string.IsNullOrEmpty(item.Car?.URL)){
+                                <img src="/images/defaultCar.jpg"
+                                    class="img-fluid rounded-3" alt="Car">
+                            }else{
+                                <img src="@item.Car?.URL"
+                                    class="img-fluid rounded-3" alt="Car">
+                            }
+                        </div>
+
+                        <div class="col-md-3 col-lg-3 col-xl-3">
+                          <h6 class="text-muted">@item.ItemName</h6>
+                          <h6 class="text-black mb-0">Cotton T-shirt</h6>
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                          <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2"
+                            onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                            <i class="fas fa-minus"></i>
+                          </button>
+
+                          <input id="form1" min="0" name="quantity" value="@item.Quantity" type="number"
+                            class="form-control form-control-sm" />
+
+                          <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2"
+                            onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                        <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                          <h6 class="mb-0"> $@item.Price</h6>
+                        </div>
+                        <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                          <a class="btn btn-danger btn-icon" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i></a>
+                          <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
+                        </div>
+                      </div>
+                   }
+
+                  <hr class="my-4">
+
+                  <div class="pt-5">
+                                        
+                    <h6 class="mb-0"><a asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a></h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 bg-grey">
+                <div class="p-5">
+                  <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
+                  <hr class="my-4">
+
+                  <div class="d-flex justify-content-between mb-4">
+                    <h5 class="text-uppercase">items 3</h5>
+                    <h5>$ @totalPrice.ToString("N2")</h5>
+                  </div>
+
+                  <h5 class="text-uppercase mb-3">Shipping</h5>
+
+                  <div class="mb-4 pb-2">
+                    <select data-mdb-select-init>
+                      <option value="1">Free Shipping - $0.00</option>
+                      <option value="2">Two</option>
+                      <option value="3">Three</option>
+                      <option value="4">Four</option>
+                    </select>
+                  </div>
+
+                  <h5 class="text-uppercase mb-3">Promo code</h5>
+
+                  <div class="mb-5">
+                    <div data-mdb-input-init class="form-outline">
+                      <input type="text" id="form3Examplea2" class="form-control form-control-lg" />
+                      <label class="form-label" for="form3Examplea2">Enter your code</label>
+                    </div>
+                  </div>
+
+                  <hr class="my-4">
+
+                  <div class="d-flex justify-content-between mb-5">
+                    <h5 class="text-uppercase">Total price</h5>
+                    <h5>$ @totalPrice.ToString("N2")</h5>
+                  </div>
+
+                  <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block btn-lg"
+                    data-mdb-ripple-color="dark">Checkout</button>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+

@@ -56,3 +56,18 @@ a.nav-link {
 a {
     text-decoration: none;
 }
+
+.cartIcon {
+    background: none;
+    min-width: 40px;
+    margin-left: 10px;
+    padding: 2px;
+    border: none;
+    overflow: visible;
+    font-size: 1.5rem; /* Increase the size */
+    font-weight: bold; /* Make the icon thicker */
+}
+
+a.cartIcon:hover{
+    background: #f3f3f3;
+}
