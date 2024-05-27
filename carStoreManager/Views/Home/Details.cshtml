@@ -29,7 +29,14 @@
                         <p class="card-text"><strong>Quantity Available:</strong> @Html.DisplayFor(model => model.Quantity)</p>
                         <p class="card-text"><strong>Brand:</strong> @Html.DisplayFor(model => model.Brand)</p>
                         <p class="card-text"><strong>Model:</strong> @Html.DisplayFor(model => model.CarModel)</p>
-                        <div class="d-flex flex-row"><input type="number" id="quantityInput" class="form-control" min="1" max="10" value="1"><button class="btn btn-primary">Add to Cart</button></div>
+                        <form asp-action="AddToCart" asp-controller="CartItems" method="post">
+                            <input type="hidden" name="carId" value="@Model.Id" />
+                            <div class="d-flex flex-row">
+                                <input type="number" name="quantity" id="quantityInput" class="form-control" min="1" max="@Model.Quantity" value="1" />
+                                <button type="submit" class="btn btn-primary ml-2">Add to Cart</button>
+                            </div>
+                        </form>
+                        @* <div class="d-flex flex-row"><input type="number" id="quantityInput" class="form-control" min="1" max="10" value="1"><button class="btn btn-primary">Add to Cart</button></div> *@
                     </div>
                 </div>
             </div>
