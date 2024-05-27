@@ -31,6 +31,8 @@
                         <p class="card-text"><strong>Model:</strong> @Html.DisplayFor(model => model.CarModel)</p>
                         <form asp-action="AddToCart" asp-controller="CartItems" method="post">
                             <input type="hidden" name="carId" value="@Model.Id" />
+                            <input type="hidden" name="price" value="@Model.Price" />
+                            <input type="hidden" name="itemName" value="@Model.ItemName" />
                             <div class="d-flex flex-row">
                                 <input type="number" name="quantity" id="quantityInput" class="form-control" min="1" max="@Model.Quantity" value="1" />
                                 <button type="submit" class="btn btn-primary ml-2">Add to Cart</button>

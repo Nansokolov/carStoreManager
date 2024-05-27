@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using carStoreManager.Data;
 using carStoreManager.Models;
 using Microsoft.AspNetCore.Identity;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace carStoreManager.Controllers
 {
@@ -25,7 +26,13 @@ namespace carStoreManager.Controllers
         // GET: CartItems
         public async Task<IActionResult> Index()
         {
-            return View(await _context.CartItem.ToListAsync());
+            var user = await _userManager.GetUserAsync(User);
+            var userId = user.Id;
+
+            var cartItem = await _context.CartItem.Where(c => c.UserId == userId)
+               .Include(c => c.Car)
+               .ToListAsync();
+            return View(cartItem);
         }
 
         // GET: CartItems/Details/5
@@ -69,20 +76,39 @@ namespace carStoreManager.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToCart(int quantity, int carId)
+        public async Task<IActionResult> AddToCart(int quantity, int carId, string price, string itemName)
         {
 
             if (ModelState.IsValid)
             {
                 var userId = _userManager.GetUserId(User);
 
-                var cartItem = new CartItem
+                // Check if the item already exists in the cart
+                var existingCartItem = await _context.CartItem
+                    .FirstOrDefaultAsync(c => c.CarId == carId && c.UserId == userId);
+                double number;
+                if (double.TryParse(price.Replace(",", ""), out number))
                 {
-                    CarId = carId,
-                    Quantity = quantity,
-                    UserId = userId
-                };
-                _context.Add(cartItem);
+                    number = double.Parse(price.Replace(",", "")) * quantity;
+                }
+                if (existingCartItem != null)
+                {
+                    // Update the quantity of the existing item
+                    existingCartItem.Quantity += quantity;
+                }
+                else
+                {
+                    // Create a new cart item
+                    var cartItem = new CartItem
+                    {
+                        CarId = carId,
+                        Price = number.ToString("N2"),
+                        Quantity = quantity,
+                        UserId = userId,
+                        ItemName = itemName
+                    };
+                    _context.Add(cartItem);
+                }
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -90,44 +116,8 @@ namespace carStoreManager.Controllers
             else
             {
                 return NotFound();
-
             }
 
-            //return View();
-
-            /* var car = await _context.Cars.FindAsync(carId);
-
-            if (car == null || quantity > car.Quantity)
-            {
-                ModelState.AddModelError("Quantity", "Invalid quantity or item does not exist.");
-                return RedirectToAction("Details", "Car", new { id = carId });
-            }
-
-            var existingCartItem = _context.CartItems
-                .FirstOrDefault(c => c.CarId == carId && c.UserId == userId);
-
-            if (existingCartItem != null)
-            {
-                existingCartItem.Quantity += quantity;
-                _context.CartItems.Update(existingCartItem);
-            }
-            else
-            {
-                var cartItem = new CartItem
-                {
-                    CarId = car.Id,
-                    ItemName = car.ItemName,
-                    Price = car.Price,
-                    Quantity = quantity,
-                    UserId = userId
-                };
-
-                _context.CartItems.Add(cartItem);
-            }
-
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Index");*/
         }
 
         // GET: CartItems/Edit/5
