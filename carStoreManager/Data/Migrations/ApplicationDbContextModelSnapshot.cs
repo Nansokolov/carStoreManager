@@ -295,6 +295,8 @@ namespace carStoreManager.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CarId");
+
                     b.ToTable("CartItem");
                 });
 
@@ -354,6 +356,17 @@ namespace carStoreManager.Data.Migrations
                     b.HasOne("carStoreManager.Models.ApplicationUser", null)
                         .WithMany("Cars")
                         .HasForeignKey("ApplicationUserId");
+                });
+
+            modelBuilder.Entity("carStoreManager.Models.CartItem", b =>
+                {
+                    b.HasOne("carStoreManager.Models.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("carStoreManager.Models.ApplicationUser", b =>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using carStoreManager.Data;
 using carStoreManager.Models;
+using carStoreManager.Models.Events;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 
@@ -79,6 +80,13 @@ namespace carStoreManager.Controllers
                 _context.Add(newCar);
                 //string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
+                var carCreated = new CarCreated
+                {
+                    Id = Guid.NewGuid(),
+                    Name = car.ItemName,
+                    CreatedDate = DateTime.Now,
+                };
+                _context.Append(carCreated);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
